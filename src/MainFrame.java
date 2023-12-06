@@ -1,6 +1,7 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -9,8 +10,9 @@ import javax.swing.JOptionPane;
 
 public class MainFrame extends JFrame {
 	private MainPanel mainPanel = null; 
-	private JMenu helpMenu = new JMenu("도움말");
+	private JMenu helpMenu = new JMenu();
 	private JMenuItem helpItem = new JMenuItem("게임 방법");
+	private ImageIcon helpIcon = new ImageIcon("toolHelp.png");
 
 	public MainFrame(){
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -26,7 +28,7 @@ public class MainFrame extends JFrame {
 	private void makeMenu() {
 		JMenuBar menuB = new JMenuBar();
 		this.setJMenuBar(menuB); //add가 아니라 set인 이유= 메뉴바가 한개라서
-		
+		helpMenu.setIcon(helpIcon);
 		helpMenu.add(helpItem);
 		menuB.add(helpMenu);
 		
