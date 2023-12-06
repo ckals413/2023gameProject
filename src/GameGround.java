@@ -126,13 +126,6 @@ public class GameGround extends JPanel{
       add(textInput);
       
       
-      
-//      // 플레이어 레이블 초기화 및 위치 설정
-//      playerLabel = new JLabel(playerIcon1_1);
-//      playerLabel.setBounds(15, 240, 120, 80);
-//      add(playerLabel);
-//      
-   // selectedOption에 따라 플레이어 아이콘 설정
       ImageIcon playerIcon;
       if ("P1".equals(selectedOption)) {
           playerIcon = playerIcon1_1;
@@ -571,7 +564,7 @@ public class GameGround extends JPanel{
                   Vector<JLabel> toRemove = new Vector<>(); // 제거할 라벨을 저장할 임시 벡터
                   if (isPaused) {
                       try {
-                          Thread.sleep(100); // 정지 상태일 때 짧은 대기 시간을 주어 CPU 사용률을 낮춤
+                          Thread.sleep(100);
                       } catch (InterruptedException e) {
                           e.printStackTrace();
                       }
@@ -669,7 +662,7 @@ public class GameGround extends JPanel{
               }
           }
 
-          // targetVector에 들어있는 모든 JLabel들의 y좌표 증가
+          // Vector에 들어있는 모든 JLabel들의 x좌표 감소
           @Override
           public void run() {
               while (true) {
@@ -681,9 +674,9 @@ public class GameGround extends JPanel{
                   } catch (InterruptedException e) {
                       return;
                   }
-              } // end of while
-          } // end of run()
-      } // end of DropWordThread
+              } 
+          } 
+      } 
 
       /**********0000000000000000[[[ 왼쪽 끝까지 확인하는 스레드 ]]]]]000000000000000000000000**************/      
       //왼쪽끝에까지 왔는지 확인하는 스레드
