@@ -112,7 +112,8 @@ public class ScorePanel extends JPanel {
     public synchronized int getScore() {
 		return score;
 	}
-
+    
+   
     public void loseHalfLife() {
         if (lives > 0) {
             lives -= 0.5;

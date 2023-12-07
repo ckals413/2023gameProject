@@ -67,7 +67,7 @@ public class GameGround extends JPanel{
     public int levelSpeed = 0;
     public int monsterSpeed = 2;
     public int generationTime = 500;
-    public int time = 5;
+    public int time = 60;
     private boolean isInvincible = false; // 무적 상태 플래그
     private int invincibleCount = 0; // 무적 상태 지속 횟수
     
@@ -310,7 +310,7 @@ public class GameGround extends JPanel{
        }
        // 몬스터 4 (몬스터 정지)
        else if (icon.equals(bubblePop4)) {
-          //generationTime = 5000;
+          //generationTime = 500;
            scorePanel.increase(100); // 점수 업데이트
            
            isPaused = true; // 일시정지 상태
@@ -742,8 +742,8 @@ public class GameGround extends JPanel{
                         repaint();
                         System.out.println(targetVector.get(i).getText() + " 실패");
                         
-//                        // true값이 반환되면 게임을 종료한다.
-//                        boolean isGameOver =scorePanel.decreaseLife();
+                        // 생명이 다 떨어지면 종료
+//                        boolean isGameOver = scorePanel.isGameOver();
 //                        if(isGameOver == true) { // 모든스레드 종료
 //                           gameOver();
 //                        }
