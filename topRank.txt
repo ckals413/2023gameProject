@@ -1,0 +1,14 @@
+AAA,210
+sss,30
+qqq,305
+bbb,100
+aaa,40
+OOO,100
+xxx,490
+ddd,10
+kkkk,1000
+dsds,2000
+oooo,0
+ksks,5
+chamin,100
+trax,0

@@ -8,6 +8,7 @@ import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -86,7 +87,7 @@ public class MainPanel extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				System.out.println("Click startButton");
-				IdFrame idFrame = new IdFrame();
+				new IdFrame();
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -103,8 +104,13 @@ public class MainPanel extends JPanel {
 		scoreLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				System.out.println("Click scoreButton");
-				//TwoPeopleFrame twoPeopleFrame = new TwoPeopleFrame();
+				System.out.println("Click scoreButton");	
+				Scoreboard scoreboard = new Scoreboard();
+		          // 점수판 창 열기
+		          try {
+					new ScoreboardFrame(scoreboard).setVisible(true);
+				} catch (IOException e1) {
+				}
 			}
 
 			@Override

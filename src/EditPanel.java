@@ -29,7 +29,7 @@ public class EditPanel extends JPanel{
 	}
 	
 	private void saveTextToFile() {
-		//단어 추가할때 파일에서 단어가 삭제되고, 1개만 저장되었는데 수정완료 
+
 	    String text = wordInput.getText().trim().replace(" ", ""); //단어 양끝에 공백 삭제
 	    try {
 			FileWriter fout = new FileWriter(file, true);

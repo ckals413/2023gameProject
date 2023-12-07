@@ -71,6 +71,11 @@ public class ScorePanel extends JPanel {
     	this.playerId = id;
         playerIdLabel.setText("ID: " + playerId);
     }
+    
+    public String getPlayerId() {
+        return playerId;
+    }
+
 
     
     public void gameTime(int time) {

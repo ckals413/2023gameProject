@@ -67,7 +67,7 @@ public class GameGround extends JPanel{
     public int levelSpeed = 0;
     public int monsterSpeed = 2;
     public int generationTime = 1000;
-    public int time = 40;
+    public int time = 15;
     private boolean isInvincible = false; // 무적 상태 플래그
     private int invincibleCount = 0; // 무적 상태 지속 횟수
     
@@ -415,6 +415,19 @@ public class GameGround extends JPanel{
 
       /**************00000000000000000000000000000000000000000000000000********/
       //여기에 점수 저장, 결과창 띄우기, 등등 , 게임상태 초기화, 하기 
+      
+      try {
+          Scoreboard scoreboard = new Scoreboard();
+
+          // scorePanel에서 플레이어 ID를 가져오기
+          String playerId = scorePanel.getPlayerId();
+          scoreboard.updateScore(playerId, scorePanel.getScore());
+
+          // 점수판 창 열기
+          new ScoreboardFrame(scoreboard).setVisible(true);
+      } catch (IOException e) {
+          e.printStackTrace(); // 에러 처리
+      }
       
    }
     
