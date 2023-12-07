@@ -12,3 +12,5 @@ oooo,0
 ksks,5
 chamin,100
 trax,0
+ksksk,0
+wawa,80

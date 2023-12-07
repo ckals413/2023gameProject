@@ -6,41 +6,68 @@ import java.util.ArrayList;
 public class ScoreboardFrame extends JFrame {
     public ScoreboardFrame(Scoreboard scoreboard) throws IOException {
         setTitle("점수판");
-        setSize(500, 600);
+        setSize(400, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        JPanel panel = new JPanel();
+      
+        BackgroundPanel panel = new BackgroundPanel("topRankBackGround.png");
         panel.setLayout(null);
 
         ArrayList<Scoreboard.PlayerScore> topScores = scoreboard.getTopScores(10);
         
+        ImageIcon scoreButtonIcon = new ImageIcon("scoreButton1.png");
+        JLabel scoreButtonLabel = new JLabel(scoreButtonIcon);
+        scoreButtonLabel.setBounds(100, 30, scoreButtonIcon.getIconWidth(), scoreButtonIcon.getIconHeight());
+        panel.add(scoreButtonLabel);
+
+        
         JLabel infoIdLabel = new JLabel("ID");
         infoIdLabel.setFont(new Font("SansSerif", Font.BOLD, 20));
-        infoIdLabel.setBounds(15, 10, 100, 30); // x, y, width, height 설정
+        infoIdLabel.setBounds(112, 80, 100, 30); // x, y, width, height 설정
+        infoIdLabel.setForeground(Color.yellow);
         panel.add(infoIdLabel);
         
         
         JLabel infoScoreLabel = new JLabel("SCORE");
         infoScoreLabel.setFont(new Font("SansSerif", Font.BOLD, 20));
-        infoScoreLabel.setBounds(123, 10, 100, 30); // x, y, width, height 설정
+        infoScoreLabel.setBounds(217, 80, 100, 30); // x, y, width, height 설정
+        infoScoreLabel.setForeground(Color.yellow);
         panel.add(infoScoreLabel);
         
-        int yPos = 50; // 초기 y 위치 설정
+        int yPos = 125; // 초기 y 위치 설정
         for (Scoreboard.PlayerScore ps : topScores) {
-        	JLabel idLabel = new JLabel(ps.playerId);
-            JLabel scoreLabel = new JLabel(" " + ps.score);
-            idLabel.setFont(new Font("SansSerif", Font.BOLD, 20));
-            idLabel.setBounds(10, yPos, 100, 30); // x, y, width, height 설정
-            scoreLabel.setFont(new Font("SansSerif", Font.BOLD, 20));
-            scoreLabel.setBounds(120, yPos, 200, 30); // x, y, width, height 설정
+            JLabel idLabel = createLabel(ps.playerId, 112, yPos);
+            JLabel scoreLabel = createLabel(String.valueOf(ps.score), 235, yPos);
             panel.add(idLabel);
             panel.add(scoreLabel);
 
-            yPos += 40; // 다음 라벨의 y 위치를 30 (라벨 높이) + 10 (간격) 픽셀만큼 증가
+            yPos += 40; // 다음 라벨의 y 위치를 증가
         }
 
-        JScrollPane scrollPane = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        add(scrollPane, BorderLayout.CENTER);
+        add(panel);
+    }
+
+    private JLabel createLabel(String text, int x, int y) {
+        JLabel label = new JLabel(text);
+        label.setFont(new Font("SansSerif", Font.BOLD, 16));
+        label.setForeground(Color.white); 
+        label.setBounds(x, y, 200, 30);
+        return label;
+    }
+
+    //배경 이미지 패널
+    class BackgroundPanel extends JPanel {
+        private Image backgroundImage;
+
+        public BackgroundPanel(String fileName) {
+            backgroundImage = new ImageIcon(fileName).getImage();
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.drawImage(backgroundImage, 0, 0, this.getWidth(), this.getHeight(), this);
+        }
     }
 }
