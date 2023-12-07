@@ -19,3 +19,7 @@ dfdf,0
 dfdf,420
 chamin,45
 chamin,30
+chamin,380
+chamin,0
+chamin,0
+chamin,0
