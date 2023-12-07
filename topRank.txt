@@ -14,3 +14,8 @@ chamin,100
 trax,0
 ksksk,0
 wawa,80
+as,0
+dfdf,0
+dfdf,420
+chamin,45
+chamin,30

@@ -67,7 +67,7 @@ public class GameGround extends JPanel{
     public int levelSpeed = 0;
     public int monsterSpeed = 2;
     public int generationTime = 1000;
-    public int time = 15;
+    public int time = 60;
     private boolean isInvincible = false; // 무적 상태 플래그
     private int invincibleCount = 0; // 무적 상태 지속 횟수
     
@@ -89,10 +89,16 @@ public class GameGround extends JPanel{
    //private TextSource textSource = new TextSource(this); // 단어 벡터 생성
    // 단어를 생성하는 스레드
    private GenerateWordThread generateWordThread = new GenerateWordThread(monsterVector);
+   
+   
    // 단어를 떨어뜨리는 스레드
-   private DropWordThread dropWordThread = new DropWordThread(monsterVector);
-   // 땅에 닿은 단어 감지하는 스레드
-   private DetectLeftThread detectBottomThread = new DetectLeftThread(monsterVector);
+//   private DropWordThread dropWordThread = new DropWordThread(monsterVector);
+//   // 땅에 닿은 단어 감지하는 스레드
+//   private DetectLeftThread detectBottomThread = new DetectLeftThread(monsterVector);
+   private DropAndDetectThread dropAndDetectThread = new DropAndDetectThread(monsterVector);
+   
+   
+   
    // 맞힌 단어를 위로 올리는 스레드
    private CheckLabelPositionThread checkLabelPositionThread = new CheckLabelPositionThread();
    
@@ -115,7 +121,10 @@ public class GameGround extends JPanel{
       
       // 스레드 생성자 부르기
       generateWordThread = new GenerateWordThread(monsterVector);
-      dropWordThread = new DropWordThread(monsterVector);
+      dropAndDetectThread = new DropAndDetectThread(monsterVector);
+      //dropWordThread = new DropWordThread(monsterVector);
+      
+      
       textSource = new TextSource(this); // 단어 벡터 생성
       checkLabelPositionThread = new CheckLabelPositionThread();
         timeThread = new TimeThread(); // TimeThread 인스턴스 생성
@@ -280,7 +289,7 @@ public class GameGround extends JPanel{
    }
 
    // 몬스터 충돌 처리 메소드
-   private void processMonsterCollision(JLabel label) {
+   private void collisionDetect(JLabel label) {
        if (isInvincible) {
            invincibleCount--;
            if (invincibleCount <= 0) {
@@ -316,20 +325,21 @@ public class GameGround extends JPanel{
        }
        // 몬스터 4 (몬스터 정지)
        else if (icon.equals(bubblePop4)) {
-          //generationTime = 5000;
-           scorePanel.increase(100); // 점수 업데이트
-           
-           isPaused = true; // 일시정지 상태
-            new Thread(new Runnable() {
-                public void run() {
-                    try {
-                        Thread.sleep(5000); // 5초 동안 대기
-                        isPaused = false; // 플래그를 다시 false로 설정
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }).start();
+    	    System.out.println("Monster 4 hit, game should pause now.");
+    	    scorePanel.increase(100); // 점수 업데이트
+
+    	    isPaused = true; // 일시정지 상태
+    	    new Thread(new Runnable() {
+    	        public void run() {
+    	            try {
+    	                Thread.sleep(5000); // 5초 동안 대기
+    	                isPaused = false; // 플래그를 다시 false로 설정
+    	                System.out.println("5 seconds passed, game should resume.");
+    	            } catch (InterruptedException e) {
+    	                e.printStackTrace();
+    	            }
+    	        }
+    	    }).start();
        }
        else if (icon.equals(timeBubblePop)) {  
           increaseTimeAudio();
@@ -387,10 +397,12 @@ public class GameGround extends JPanel{
       
       // 단어생성 시작
       generateWordThread.start();
-      // 단어 떨어뜨리기 시작
-      dropWordThread.start();
-      // 땅에 닿은 단어 감지 시작
-      detectBottomThread.start();
+      dropAndDetectThread.start();
+      
+//      // 단어 떨어뜨리기 시작
+//      dropWordThread.start();
+//      // 땅에 닿은 단어 감지 시작
+//      detectBottomThread.start();
       
       checkLabelPositionThread.start();
       loadAudio("startGameTheme.wav");
@@ -401,10 +413,12 @@ public class GameGround extends JPanel{
    public void gameOver() { // 게임종료
       // 단어생성 중단
       generateWordThread.interrupt();
-      // 단어 떨어뜨리기 중단
-      dropWordThread.interrupt();
-      // 땅에 닿은 단어 감지 중단
-      detectBottomThread.interrupt();
+      dropAndDetectThread.interrupt();
+      
+//      // 단어 떨어뜨리기 중단
+//      dropWordThread.interrupt();
+//      // 땅에 닿은 단어 감지 중단
+//      detectBottomThread.interrupt();
       timeThread.interrupt(); // 시간 추적 스레드 중단
       
       /**************00000000000000000000000000000000000000000000000000********/
@@ -511,7 +525,7 @@ public class GameGround extends JPanel{
          @Override
          public void run() {
             while(true) {
-               generationTime = 1500;
+               generationTime = 500;
                generateWord();
                GameGround.this.repaint();
                try {
@@ -563,90 +577,113 @@ public class GameGround extends JPanel{
 
       /*******************************************************************/
       
-      // 단어를 왼쪽으로 움직이는 스레드
-      public class DropWordThread extends Thread {
+      // 단어를 왼쪽으로 움직이고,왼쪽 끝에 닿았는지 탐지
+      public class DropAndDetectThread extends Thread {
           private Vector<JLabel> targetVector = null;
 
-          public DropWordThread(Vector<JLabel> targetVector) {
+          public DropAndDetectThread(Vector<JLabel> targetVector) {
               this.targetVector = targetVector;
           }
 
-          // 조건에 맞게 몬스터를 왼쪽 중앙으로 움직임
-          synchronized void dropWord() {
-              synchronized (targetVector) { // targetVector에 대한 접근을 동기화
-                  Vector<JLabel> toRemove = new Vector<>(); // 제거할 라벨을 저장할 임시 벡터
-                  if (isPaused) {
-                      try {
-                          Thread.sleep(100);
-                      } catch (InterruptedException e) {
-                          e.printStackTrace();
-                      }
-                  } else {
-                      for (JLabel label : targetVector) {
-                          ImageIcon icon = (ImageIcon) label.getIcon();
+          @Override
+          public void run() {
+              while (!Thread.currentThread().isInterrupted()) {
+                  try {
+                      synchronized (targetVector) {
+                          Vector<JLabel> toRemove = new Vector<>();
+                          for (JLabel label : targetVector) {
+                              ImageIcon icon = (ImageIcon) label.getIcon();
+                              if (isPaused) {
+                                  // 몬스터 이동 로직 일시 중단
+                                  Thread.sleep(100); // 또는 적당한 대기 시간
+                                  continue;
+                              }
+                              // 속도 설정 로직
+                              setSpeedBasedOnIcon(icon);
 
-                          if (icon.equals(monster1_1) || icon.equals(monster1_2)) {
-                              speed = 6;
-                          } else if (icon.equals(monster2_1) || icon.equals(monster2_2)) {
-                              speed = 7;
-                          } else if (icon.equals(monster3_1) || icon.equals(monster3_2)) {
-                              speed = 9;
-                          } else if (icon.equals(monster4_1) || icon.equals(monster4_2)) {
-                              speed = 9;
-                          } else if (icon.equals(timeItem1_1) || icon.equals(timeItem1_2)) {
-                              speed = 5;
-                          } else if (icon.equals(heartItem1_1) || icon.equals(heartItem1_2)) {
-                              speed = 5;
-                          }else if (icon.equals(defenseItem1_1) || icon.equals(defenseItem1_2)) {
-                              speed = 5;
+                              int newX = label.getX() - speed - levelSpeed; // 왼쪽으로 이동
+                              int newY = label.getY();
+                              
+                              // 몬스터만 중앙에 도달했을 때 y축 이동
+                              if ((icon.equals(monster1_1) || icon.equals(monster1_2) || 
+                                   icon.equals(monster2_1) || icon.equals(monster2_2) ||
+                                   icon.equals(monster3_1) || icon.equals(monster3_2) ||
+                                   icon.equals(monster4_1) || icon.equals(monster4_2)) && 
+                                  newX < GameGround.this.getWidth() / 2) {
+                                  newY += (newY < GameGround.this.getHeight() / 2) ? 5 : -5;
+                              }
+
+                              label.setLocation(newX, newY);
+
+                              // 몬스터 이미지 전환
+                              toggleMonsterImage(label);
+
+                              // 왼쪽 끝에 도달했는지 확인
+                              if (newX < 35) {
+                                  processMonsterCollision(label);
+                                  toRemove.add(label);
+                              }
                           }
+                          // 몬스터의 위치가 업데이트 된 후 화면을 새로 고침
+                          GameGround.this.repaint();
+
                           
-                          if(scorePanel.getScore()<50) {
-                        	  levelSpeed = 0;
+                          // 제거할 라벨 처리
+                          for (JLabel label : toRemove) {
+                              targetVector.remove(label);
+                              GameGround.this.remove(label);
                           }
-                          else if(scorePanel.getScore()<100) {
-                        	  levelSpeed = 5;
-                          }
-                          else if(scorePanel.getScore()<150) {
-                        	  levelSpeed = 10;
-                          }
-                          else if(scorePanel.getScore()<200) {
-                        	  levelSpeed = 15;
-                          }
-                          else {
-                        	  levelSpeed = 15;
-                          }
-
-                          // 왼쪽으로 이동
-                          int newX = label.getX() - speed - levelSpeed;
-                          int newY = label.getY();
-
-                          // 몬스터만 중앙에 도달했을 때 y축 이동
-                          if ((icon.equals(monster1_1) || icon.equals(monster1_2) || 
-                               icon.equals(monster2_1) || icon.equals(monster2_2) ||
-                               icon.equals(monster3_1) || icon.equals(monster3_2) ||
-                               icon.equals(monster4_1) || icon.equals(monster4_2)) && 
-                              newX < GameGround.this.getWidth() / 2) {
-                              newY += (newY < GameGround.this.getHeight() / 2) ? 5 : -5;
-                          }
-
-
-                          label.setLocation(newX, newY);
-
-                          // 이미지 전환 로직
-                          toggleMonsterImage(label);
+                          // 몬스터가 제거된 후 화면을 새로 고침
+                          GameGround.this.repaint();
                       }
-                      for (JLabel label : toRemove) {
-                          targetVector.remove(label); // 반복 외부에서 컬렉션 수정
-                      }
-
-                      GameGround.this.repaint();
+                      Thread.sleep(200); // 다음 이동까지 대기
+                  } catch (InterruptedException e) {
+                      Thread.currentThread().interrupt();
                   }
               }
+            
+              
           }
-         
+
+          private void setSpeedBasedOnIcon(ImageIcon icon) {
+              // 속도 설정 로직
+              if (icon.equals(monster1_1) || icon.equals(monster1_2)) {
+                  speed = 5;
+              } else if (icon.equals(monster2_1) || icon.equals(monster2_2)) {
+                  speed = 7;
+              } else if (icon.equals(monster3_1) || icon.equals(monster3_2)) {
+                  speed = 9;
+              } else if (icon.equals(monster4_1) || icon.equals(monster4_2)) {
+                  speed = 9;
+              } else if (icon.equals(timeItem1_1) || icon.equals(timeItem1_2)) {
+                  speed = 4;
+              } else if (icon.equals(heartItem1_1) || icon.equals(heartItem1_2)) {
+                  speed = 4;
+              } else if (icon.equals(defenseItem1_1) || icon.equals(defenseItem1_2)) {
+                  speed = 4;
+              }
+              
+              if(scorePanel.getScore()<50) {
+            	  levelSpeed = 0;
+              }
+              else if(scorePanel.getScore()<100) {
+            	  levelSpeed = 5;
+              }
+              else if(scorePanel.getScore()<150) {
+            	  levelSpeed = 10;
+              }
+              else if(scorePanel.getScore()<200) {
+            	  levelSpeed = 15;
+              }
+              else {
+            	  levelSpeed = 15;
+              }
+              
+          }
+
           private void toggleMonsterImage(JLabel label) {
-              ImageIcon icon = (ImageIcon) label.getIcon();
+              // 이미지 전환 로직
+        	  ImageIcon icon = (ImageIcon) label.getIcon();
               // 몬스터 1 이미지 전환
               if (icon.equals(monster1_1) || icon.equals(monster1_2)) {
                   label.setIcon(icon.equals(monster1_1) ? monster1_2 : monster1_1);
@@ -675,98 +712,44 @@ public class GameGround extends JPanel{
               }
           }
 
-          // Vector에 들어있는 모든 JLabel들의 x좌표 감소
-          @Override
-          public void run() {
-              while (true) {
-                  int dropTime = 200;
-                  dropWord();
-                  GameGround.this.repaint();
-                  try {
-                      sleep(dropTime);
-                  } catch (InterruptedException e) {
-                      return;
-                  }
-              } 
-          } 
-      } 
-
-      /**********0000000000000000[[[ 왼쪽 끝까지 확인하는 스레드 ]]]]]000000000000000000000000**************/      
-      //왼쪽끝에까지 왔는지 확인하는 스레드
-      public class DetectLeftThread extends Thread {
-         
-         private Vector<JLabel>targetVector = null;
-         
-         public DetectLeftThread(Vector<JLabel>targetVector) {
-            this.targetVector = targetVector;
-         }
-         
-         @Override
-         public void run() {
-            while(true) {
-               try {
-                  sleep(1);
-                  for(int i=0; i<targetVector.size(); i++) {
-                     JLabel label = targetVector.get(i); // 현재 라벨을 가져옴
-                     // 바닥에 닿은 단어 구하기 위함
-                     int x = ((JLabel)targetVector.get(i)).getX();
-                     if (x < 35) {
-                        ImageIcon icon = (ImageIcon) label.getIcon();
-                      
-                         if (icon.equals(monster1_1) || icon.equals(monster1_2)) {
-                            scorePanel.decrease(5);
-                            processMonsterCollision(label); //무적 상태인지 확인, 
-                            //scorePanel.loseHalfLife();
-                             }
-                             else if (icon.equals(monster2_1) || icon.equals(monster2_2)) {
-                               onMonsterReachEnd(); // 플레이어 이미지 변경을 위해 
-                                scorePanel.decrease(10);
-                                processMonsterCollision(label); //무적 상태인지 확인, 
-                                //scorePanel.loseHalfLife();
-                             }
-                             else if (icon.equals(monster3_1) || icon.equals(monster3_2)) {
-                               onMonsterReachEnd(); // 플레이어 이미지 변경을 위해 
-                                scorePanel.decrease(15);
-                                processMonsterCollision(label); //무적 상태인지 확인, 
-                                //scorePanel.loseHalfLife();
-                             }
-                             else if (icon.equals(monster4_1) || icon.equals(monster4_2)) {
-                               onMonsterReachEnd(); // 플레이어 이미지 변경을 위해 
-                               scorePanel.decrease(20);
-                                processMonsterCollision(label); //무적 상태인지 확인, 
-                                //scorePanel.loseHalfLife();
-                             }
-                             else if (icon.equals(timeItem1_1) || icon.equals(timeItem1_2)) {
-                                scorePanel.decrease(0); //변화 없음
-                             }
-                             else if (icon.equals(heartItem1_1) || icon.equals(heartItem1_2)) {
-                                scorePanel.decrease(0); //변화 없음
-                             }
-                             else if (icon.equals(defenseItem1_1) || icon.equals(defenseItem1_2)) {
-                                scorePanel.decrease(0); //변화 없음
-                             }
-                        
-
-                        repaint();
-                        System.out.println(targetVector.get(i).getText() + " 실패");
-                        
-//                        // true값이 반환되면 게임을 종료한다.
-//                        boolean isGameOver =scorePanel.decreaseLife();
-//                        if(isGameOver == true) { // 모든스레드 종료
-//                           gameOver();
-//                        }
-                        
-                        // 게임이 종료되지 않을 경우 패널에서 라벨 제거 게임 계속됨
-                        GameGround.this.remove(targetVector.get(i)); // 패널에서 라벨 떼기
-                        targetVector.remove(i); // targetVector에서 삭제
-                     }
-                  }
-               } catch (InterruptedException e) {
-                  return;
-               }
-            } 
-         } 
+          private void processMonsterCollision(JLabel label) {
+              // 몬스터 충돌 처리 로직
+              ImageIcon icon = (ImageIcon) label.getIcon();
+              if (icon.equals(monster1_1) || icon.equals(monster1_2)) {
+            	  onMonsterReachEnd();
+                  scorePanel.decrease(5);
+                  collisionDetect(label); //무적 상태인지 확인,    
+              }
+              else if (icon.equals(monster2_1) || icon.equals(monster2_2)) {
+                  onMonsterReachEnd(); // 플레이어 이미지 변경을 위해 
+                  scorePanel.decrease(10);
+                  collisionDetect(label); //무적 상태인지 확인, 
+              }
+              else if (icon.equals(monster3_1) || icon.equals(monster3_2)) {
+                  onMonsterReachEnd(); // 플레이어 이미지 변경을 위해 
+                  scorePanel.decrease(15);
+                  collisionDetect(label); //무적 상태인지 확인, 
+              }
+              
+              else if (icon.equals(monster4_1) || icon.equals(monster4_2)) {
+                  onMonsterReachEnd(); // 플레이어 이미지 변경을 위해 
+                  scorePanel.decrease(20);
+                  collisionDetect(label); //무적 상태인지 확인, 
+              }
+              else if (icon.equals(timeItem1_1) || icon.equals(timeItem1_2)) {
+                  scorePanel.decrease(0); //변화 없음
+              }
+              else if (icon.equals(heartItem1_1) || icon.equals(heartItem1_2)) {
+                  scorePanel.decrease(0); //변화 없음
+              }
+              else if (icon.equals(defenseItem1_1) || icon.equals(defenseItem1_2)) {
+                  scorePanel.decrease(0); //변화 없음
+              }
+          }
+          
+          
       }
+
       
       
       // 몬스터가 왼쪽 끝에 닿았을 때 호출되는 메소드
