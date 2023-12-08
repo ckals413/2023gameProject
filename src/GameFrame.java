@@ -16,9 +16,9 @@ import javax.swing.JToolBar;
 
 public class GameFrame extends JFrame {
 	  private GamePanel gamePanel;
+	  private GameGround gameGround;
 	  private String selectedOption;
-	  private SoundEffects soundEffects1 = new SoundEffects();
-	  public static Clip clip;
+	  private SoundEffects soundEffects = new SoundEffects();
 	  
 	    public GameFrame(String id, String selectedOption) {
 	    this.selectedOption = selectedOption;
@@ -28,10 +28,12 @@ public class GameFrame extends JFrame {
 		//makeMenu();
 		makeToolbar();
 		gamePanel = new GamePanel(selectedOption);
+		//gamePanel = new GamePanel(selectedOption, soundEffects);
 		gamePanel.setPlayerId(id);
 		getContentPane().add(gamePanel,BorderLayout.CENTER);
 		setVisible(true);
-		//soundEffects1.loadAudio(); // 오디오 클립 로드
+		soundEffects.loadAudio(); // 오디오 클립 로드
+		
 		
 	}
 //	//메뉴바 만들기
@@ -126,8 +128,8 @@ public class GameFrame extends JFrame {
 	        @Override
 	        public void actionPerformed(ActionEvent e) {
 	            System.out.println("soundOffBtn  clicked");
-	            clip.stop();
-	            //soundEffects1.stopAudio();
+	          
+	            soundEffects.stopAudio();
 	        }
 	    });
 		bar.add(soundOffBtn);
@@ -139,8 +141,8 @@ public class GameFrame extends JFrame {
 	        @Override
 	        public void actionPerformed(ActionEvent e) {
 	            System.out.println("soundOnBtn  clicked");
-	            clip.loop(clip.LOOP_CONTINUOUSLY);
-	            //soundEffects1.startAudio();
+	           
+	            soundEffects.startAudio();
 	        }
 	    });
 		bar.add(soundOnBtn);

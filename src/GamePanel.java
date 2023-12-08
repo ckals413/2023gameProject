@@ -8,8 +8,9 @@ public class GamePanel extends JPanel {
     private ScorePanel scorePanel;
     private GameGround gameGround;
     private String selectedOption; // selectedOption을 멤버 변수로 추가
-
+    
     public GamePanel(String selectedOption) {
+    	
         this.selectedOption = selectedOption; // 생성자를 통해 selectedOption 초기화
         scorePanel = new ScorePanel();
         setBackground(Color.yellow);    
@@ -20,6 +21,7 @@ public class GamePanel extends JPanel {
     public void setPlayerId(String id) {
         scorePanel.setPlayerId(id);
     }
+    
 
     private void splitPanel() {
         JSplitPane hPane = new JSplitPane();
