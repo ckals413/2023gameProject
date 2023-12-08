@@ -78,7 +78,25 @@ public class GameFrame extends JFrame {
 //		JButton imageBtn = new JButton(normalIcon);
 //		imageBtn.setRolloverIcon(rolloverIcon);
 //		imageBtn.setPressedIcon(pressedIcon);
-//		bar.add(imageBtn);
+//		bar.add(imageBtn);ImageIcon helpIcon = new ImageIcon("toolHelp.png");
+		ImageIcon exitIcon = new ImageIcon("toolExit.png");
+		JButton exitBtn = new JButton(exitIcon);
+		exitBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+			      
+		        int result = JOptionPane.showConfirmDialog(GameFrame.this, 
+		                                                     "정말 종료하시겠습니까?",
+		                                                     "종료 확인", 
+		                                                     JOptionPane.YES_NO_OPTION,
+		                                                     JOptionPane.ERROR_MESSAGE); 
+		        if (result == JOptionPane.YES_OPTION) {
+		            System.exit(0);
+		        }
+		    }
+        });
+		bar.add(exitBtn);
+		
 		
 		ImageIcon helpIcon = new ImageIcon("toolHelp.png");
 		JButton helpBtn = new JButton(helpIcon);
@@ -98,55 +116,60 @@ public class GameFrame extends JFrame {
 		bar.addSeparator();
 		bar.addSeparator();
 		
-		ImageIcon stopIcon = new ImageIcon("toolStop.png");
-		JButton stopBtn = new JButton(stopIcon);
-		stopBtn.addActionListener(new ActionListener() {
-	        @Override
-	        public void actionPerformed(ActionEvent e) {
-	            System.out.println("stopBtn  clicked");
-	           
-	            
-	        }
-	    });
-		bar.add(stopBtn);
-		
-		ImageIcon palseIcon = new ImageIcon("toolPalse.png");
-		JButton palseBtn = new JButton(palseIcon);
-		palseBtn.addActionListener(new ActionListener() {
-	        @Override
-	        public void actionPerformed(ActionEvent e) {
-	            System.out.println("palseBtn  clicked");
-	        }
-	    });
-		bar.add(palseBtn);
-		
-		bar.addSeparator();
-		
+//		ImageIcon stopIcon = new ImageIcon("toolStop.png");
+//		JButton stopBtn = new JButton(stopIcon);
+//		stopBtn.addActionListener(new ActionListener() {
+//	        @Override
+//	        public void actionPerformed(ActionEvent e) {
+//	            System.out.println("stopBtn  clicked");
+//	          
+//	          
+//	        }
+//	    });
+//		bar.add(stopBtn);
+//		
+//		ImageIcon palseIcon = new ImageIcon("toolPalse.png");
+//		JButton palseBtn = new JButton(palseIcon);
+//		palseBtn.addActionListener(new ActionListener() {
+//	        @Override
+//	        public void actionPerformed(ActionEvent e) {
+//	            System.out.println("palseBtn  clicked");
+//	        }
+//	    });
+//		bar.add(palseBtn);
+//		
+//		bar.addSeparator();
+//		
 		ImageIcon soundOffIcon = new ImageIcon("toolSoundOff.png");
 		JButton soundOffBtn = new JButton(soundOffIcon);
-		soundOffBtn.addActionListener(new ActionListener() {
-	        @Override
-	        public void actionPerformed(ActionEvent e) {
-	            System.out.println("soundOffBtn  clicked");
-	          
-	            soundEffects.stopAudio();
-	        }
-	    });
 		bar.add(soundOffBtn);
 		
 		
 		ImageIcon soundOnIcon = new ImageIcon("toolSoundOn.png");
 		JButton soundOnBtn = new JButton(soundOnIcon);
+		bar.add(soundOnBtn);
+		
+		soundOnBtn.setEnabled(false);
+		
+		soundOffBtn.addActionListener(new ActionListener() {
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	            System.out.println("soundOffBtn  clicked");
+	            soundOffBtn.setEnabled(false);
+	            soundOnBtn.setEnabled(true);
+	            soundEffects.stopAudio();
+	        }
+	    });
+		
 		soundOnBtn.addActionListener(new ActionListener() {
 	        @Override
 	        public void actionPerformed(ActionEvent e) {
 	            System.out.println("soundOnBtn  clicked");
-	           
+	            soundOffBtn.setEnabled(true);
+	            soundOnBtn.setEnabled(false);
 	            soundEffects.startAudio();
 	        }
 	    });
-		bar.add(soundOnBtn);
-		
 		
 		
 		

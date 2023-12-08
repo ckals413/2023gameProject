@@ -469,7 +469,7 @@ public class GameGround extends JPanel{
               double rand = Math.random();
               
               if(!isPaused) {
-            	  if (rand < 0.1) { // 5% 확률로 몬스터 2 생성
+                 if (rand < 0.1) { // 5% 확률로 몬스터 2 생성
                       targetLabel = new JLabel(newWord, monster2_1, SwingConstants.CENTER);
                   } else if (rand < 0.2) { // 추가 5% 확률로 몬스터 3 생성
                       targetLabel = new JLabel(newWord, monster3_1, SwingConstants.CENTER);
@@ -503,7 +503,7 @@ public class GameGround extends JPanel{
                 targetLabel.setOpaque(false); // 배경 투명하게
                 targetVector.addElement(targetLabel); // targetVector에 생성한 newWord 추가
                 GameGround.this.add(targetLabel);
-            	  
+                 
               }
               
               
@@ -720,7 +720,7 @@ public class GameGround extends JPanel{
                         ImageIcon icon = (ImageIcon) label.getIcon();
                       
                          if (icon.equals(monster1_1) || icon.equals(monster1_2)) {
-                        	 onMonsterReachEnd();
+                            onMonsterReachEnd();
                             scorePanel.decrease(5);
                             processMonsterCollision(label); //무적 상태인지 확인, 
                             //scorePanel.loseHalfLife();
