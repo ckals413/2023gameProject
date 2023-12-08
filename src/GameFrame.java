@@ -22,7 +22,7 @@ public class GameFrame extends JFrame {
 	  
 	    public GameFrame(String id, String selectedOption) {
 	    this.selectedOption = selectedOption;
-		setTitle("게임");
+		setTitle("추억의 버블 보블");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(1050,600);
 		//makeMenu();

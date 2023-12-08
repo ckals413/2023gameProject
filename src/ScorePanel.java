@@ -8,12 +8,16 @@ import javax.swing.JPanel;
 public class ScorePanel extends JPanel {
     private int score = 0;
     private double lives = 5.0; // 총 목숨 수 (반 목숨을 표현하기 위해 double 타입 사용)
+   
     private JLabel scoreLabel = new JLabel(Integer.toString(score));
-    private JLabel[] lifeLabels = new JLabel[5]; // 목숨을 표시할 라벨 배열
+    private JLabel[] lifeLabels = new JLabel[5]; // 목숨을 표시할 레이블 배열
     private JLabel timeLabel = new JLabel("Timer : 00");
     private JLabel playerIdLabel; // 사용자 ID를 표시할 레이블
     private String playerId; // 사용자 ID를 저장할 필드
-    private JLabel levelLabel = new JLabel(); // 레벨 이미지를 표시할 라벨
+    private JLabel levelLabel = new JLabel(); // 레벨 이미지를 표시할 레이블
+    private JLabel timeImageLabel; // time 이미지 레이블
+    private JLabel idImageLabel; // id 이미지 레이블
+    private JLabel scoreImageLabel; //  이미지 레이블
 
 	
     public ScorePanel() {
@@ -21,34 +25,49 @@ public class ScorePanel extends JPanel {
         setLayout(null); // 레이아웃 매니저 비활성화
 
         // 하트 이미지 라벨 초기화 및 배치
-        int heartX = 10; // 시작 x 위치
+        int heartX = 25; // 시작 x 위치
         for (int i = 0; i < 5; i++) {
             lifeLabels[i] = new JLabel(new ImageIcon("heart1.png"));
-            lifeLabels[i].setBounds(heartX, 10, 30, 30); // 위치와 크기 설정
+            lifeLabels[i].setBounds(heartX, 20, 30, 30); // 위치와 크기 설정
             add(lifeLabels[i]);
             heartX += 35; // 다음 하트의 x 위치
         }
-
-        // 점수 라벨 배치
-        JLabel scoreText = new JLabel("Score: ");
-        scoreText.setBounds(10, 50, 50, 30); // 위치와 크기 설정
-        add(scoreText);
-
-        scoreLabel.setBounds(60, 50, 100, 30); // 위치와 크기 설정
+        
+        
+        
+        
+        //점수 표시
+        scoreLabel.setBounds(145, 86, 100, 30); // 위치와 크기 설정
+        scoreLabel.setFont(new Font("맑은고딕", Font.BOLD, 20));
         add(scoreLabel);
         
-        timeLabel.setFont(new Font("맑은고딕", Font.BOLD, 18));
-		timeLabel.setForeground(Color.blue);
-		timeLabel.setBounds(20, 80, 200, 26);
-		//timeLabel.setText());
-		add(timeLabel);
-		
-		 // 사용자 ID 레이블 초기화 및 배치
-	    playerIdLabel = new JLabel("ID: ");
-	    playerIdLabel.setBounds(10, 110, 200, 30); // 위치와 크기 설정
+        scoreImageLabel = new JLabel(new ImageIcon("labelScore.png"));
+        scoreImageLabel.setBounds(15, 50, 200, 100); // 위치와 크기 설정
+        add(scoreImageLabel);
+        
+        //시간 
+        timeLabel.setFont(new Font("맑은고딕", Font.BOLD, 23));
+        timeLabel.setForeground(Color.blue);
+        timeLabel.setBounds(155, 138, 200, 26); // 위치 조정, 'timeImageLabel'에 맞추기
+        add(timeLabel);
+        
+        timeImageLabel = new JLabel(new ImageIcon("labelTime.png"));
+        timeImageLabel.setBounds(15, 100, 200, 100); // 위치와 크기 설정
+        add(timeImageLabel);
+        
+        // 사용자 ID 표시
+	    playerIdLabel = new JLabel();
+	    playerIdLabel.setBounds(125, 183, 200, 30); // 위치와 크기 설정
+	    playerIdLabel.setFont(new Font("맑은고딕", Font.BOLD, 18));
 	    add(playerIdLabel);
+	    
+	    idImageLabel = new JLabel(new ImageIcon("labelId.png"));
+        idImageLabel.setBounds(15, 150, 200, 100); // 위치와 크기 설정
+        add(idImageLabel);
 
-	    levelLabel.setBounds(10, 130, 120, 120); // 위치와 크기 설정
+	    
+	    //레벨 이미지 
+	    levelLabel.setBounds(40, 200, 120, 120); // 위치와 크기 설정
         add(levelLabel);
         updateLevelImage(); // 초기 레벨 이미지 설정
         
@@ -69,7 +88,7 @@ public class ScorePanel extends JPanel {
  // 사용자 ID를 설정하는 메소드
     public void setPlayerId(String id) {
     	this.playerId = id;
-        playerIdLabel.setText("ID: " + playerId);
+        playerIdLabel.setText(playerId);
     }
     
     public String getPlayerId() {
@@ -79,7 +98,7 @@ public class ScorePanel extends JPanel {
 
     
     public void gameTime(int time) {
-    	timeLabel.setText("Timer : " + Integer.toString(time)); // 시간 업데이트
+    	timeLabel.setText(Integer.toString(time)); // 시간 업데이트
     }
 
     public synchronized void increase() {
