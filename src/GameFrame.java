@@ -27,8 +27,8 @@ public class GameFrame extends JFrame {
 		setSize(1050,600);
 		//makeMenu();
 		makeToolbar();
-		gamePanel = new GamePanel(selectedOption);
-		//gamePanel = new GamePanel(selectedOption, soundEffects);
+		//gamePanel = new GamePanel(selectedOption);
+		gamePanel = new GamePanel(selectedOption, soundEffects);
 		gamePanel.setPlayerId(id);
 		getContentPane().add(gamePanel,BorderLayout.CENTER);
 		setVisible(true);

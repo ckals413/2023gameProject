@@ -67,7 +67,7 @@ public class GameGround extends JPanel{
     public int levelSpeed = 0;
     public int monsterSpeed = 2;
     public int generationTime = 500;
-    public int time = 4;
+    public int time = 60;
     private boolean isInvincible = false; // 무적 상태 플래그
     private int invincibleCount = 0; // 무적 상태 지속 횟수
     
@@ -108,9 +108,10 @@ public class GameGround extends JPanel{
 
    
 
-   public GameGround(ScorePanel scorePanel, String selectedOption) {
-      this.selectedOption = selectedOption;
+   public GameGround(ScorePanel scorePanel, String selectedOption, SoundEffects soundEffects) {
+     this.selectedOption = selectedOption;
      this.scorePanel = scorePanel;
+     this.soundEffects = soundEffects;
      System.out.println("옵션"+selectedOption);
       
       // 스레드 생성자 부르기
@@ -466,41 +467,46 @@ public class GameGround extends JPanel{
             JLabel targetLabel;
               String newWord = textSource.next();
               double rand = Math.random();
-
-              if (rand < 0.1) { // 5% 확률로 몬스터 2 생성
-                  targetLabel = new JLabel(newWord, monster2_1, SwingConstants.CENTER);
-              } else if (rand < 0.2) { // 추가 5% 확률로 몬스터 3 생성
-                  targetLabel = new JLabel(newWord, monster3_1, SwingConstants.CENTER);
-              } else if (rand < 0.3) { // 추가 5% 확률로 몬스터 4 생성
-                  targetLabel = new JLabel(newWord, monster4_1, SwingConstants.CENTER);
-              } else if (rand < 0.4) { // 추가 5% 확률로 시간아이템 생성
-                  targetLabel = new JLabel(newWord, timeItem1_1, SwingConstants.CENTER);
-              } else if (rand < 0.6) { // 추가 5% 확률로 하트 아이템
-                  targetLabel = new JLabel(newWord, heartItem1_1, SwingConstants.CENTER);
-              }else if (rand < 0.9) { // 추가 5% 확률로 방패 아이템
-                  targetLabel = new JLabel(newWord, defenseItem1_1, SwingConstants.CENTER);
-              }else { // 나머지 확률로 일반 몬스터 생성
-                  targetLabel = new JLabel(newWord, monster1_1, SwingConstants.CENTER);
+              
+              if(!isPaused) {
+            	  if (rand < 0.1) { // 5% 확률로 몬스터 2 생성
+                      targetLabel = new JLabel(newWord, monster2_1, SwingConstants.CENTER);
+                  } else if (rand < 0.2) { // 추가 5% 확률로 몬스터 3 생성
+                      targetLabel = new JLabel(newWord, monster3_1, SwingConstants.CENTER);
+                  } else if (rand < 0.3) { // 추가 5% 확률로 몬스터 4 생성
+                      targetLabel = new JLabel(newWord, monster4_1, SwingConstants.CENTER);
+                  } else if (rand < 0.4) { // 추가 5% 확률로 시간아이템 생성
+                      targetLabel = new JLabel(newWord, timeItem1_1, SwingConstants.CENTER);
+                  } else if (rand < 0.6) { // 추가 5% 확률로 하트 아이템
+                      targetLabel = new JLabel(newWord, heartItem1_1, SwingConstants.CENTER);
+                  }else if (rand < 0.9) { // 추가 5% 확률로 방패 아이템
+                      targetLabel = new JLabel(newWord, defenseItem1_1, SwingConstants.CENTER);
+                  }else { // 나머지 확률로 일반 몬스터 생성
+                      targetLabel = new JLabel(newWord, monster1_1, SwingConstants.CENTER);
+                  }
+                
+                targetLabel.setVerticalTextPosition(SwingConstants.BOTTOM); //사진과 레이블 정렬
+                  targetLabel.setHorizontalTextPosition(SwingConstants.CENTER); //사진과 레이블 정렬
+                  targetLabel.setSize(120, 80); // 크기 조정
+                
+                targetLabel.setFont(new Font("Dialog", 1, 10));
+                targetLabel.setForeground(Color.WHITE);
+                
+                labelImageState.put(targetLabel, true);
+                
+                // x 좌표
+                // y 좌표 랜덤 설정
+                int startX = 700;//GameGround.this.getWidth() - targetLabel.getWidth();
+                 int startY = (int) (Math.random() * (GameGround.this.getHeight() * 3 / 4));   
+                targetLabel.setLocation(startX,startY);
+                
+                targetLabel.setOpaque(false); // 배경 투명하게
+                targetVector.addElement(targetLabel); // targetVector에 생성한 newWord 추가
+                GameGround.this.add(targetLabel);
+            	  
               }
-            
-            targetLabel.setVerticalTextPosition(SwingConstants.BOTTOM); //사진과 레이블 정렬
-              targetLabel.setHorizontalTextPosition(SwingConstants.CENTER); //사진과 레이블 정렬
-              targetLabel.setSize(120, 80); // 크기 조정
-            
-            targetLabel.setFont(new Font("Dialog", 1, 10));
-            targetLabel.setForeground(Color.WHITE);
-            
-            labelImageState.put(targetLabel, true);
-            
-            // x 좌표
-            // y 좌표 랜덤 설정
-            int startX = 700;//GameGround.this.getWidth() - targetLabel.getWidth();
-             int startY = (int) (Math.random() * (GameGround.this.getHeight() * 3 / 4));   
-            targetLabel.setLocation(startX,startY);
-            
-            targetLabel.setOpaque(false); // 배경 투명하게
-            targetVector.addElement(targetLabel); // targetVector에 생성한 newWord 추가
-            GameGround.this.add(targetLabel);
+              
+              
          }
          
          public GenerateWordThread(Vector<JLabel>targetVector) {

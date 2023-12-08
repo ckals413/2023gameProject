@@ -8,20 +8,21 @@ public class GamePanel extends JPanel {
     private ScorePanel scorePanel;
     private GameGround gameGround;
     private String selectedOption; // selectedOption을 멤버 변수로 추가
-    
-    public GamePanel(String selectedOption) {
-    	
+    private SoundEffects soundEffects; // SoundEffects 멤버 변수 추가
+
+    public GamePanel(String selectedOption, SoundEffects soundEffects) {
         this.selectedOption = selectedOption; // 생성자를 통해 selectedOption 초기화
+        this.soundEffects = soundEffects; // SoundEffects 초기화
         scorePanel = new ScorePanel();
         setBackground(Color.yellow);    
         setLayout(new BorderLayout());
         splitPanel();
     }
-
+    
     public void setPlayerId(String id) {
         scorePanel.setPlayerId(id);
     }
-    
+
 
     private void splitPanel() {
         JSplitPane hPane = new JSplitPane();
@@ -38,7 +39,11 @@ public class GamePanel extends JPanel {
         vPane.setBottomComponent(new EditPanel());
         
         hPane.setRightComponent(vPane);
-        // GameGround 객체를 생성할 때 selectedOption 값을 전달합니다.
-        hPane.setLeftComponent(new GameGround(scorePanel, selectedOption));
+        // GameGround 객체를 생성할 때 selectedOption과 soundEffects 값을 전달합니다.
+        gameGround = new GameGround(scorePanel, selectedOption, soundEffects);
+        hPane.setLeftComponent(gameGround);
     }
 }
+
+
+
