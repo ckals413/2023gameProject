@@ -18,8 +18,9 @@ import javax.swing.JTextField;
 
 public class IdFrame extends JFrame {
 	private JTextField textField;
-
-	public IdFrame() {
+	private MainFrame mainFrame;
+	
+	public IdFrame(MainFrame mainFrame) {
 		setTitle("게임 회원가입");
 		setSize(300, 400);
 		Container c = getContentPane();
@@ -27,6 +28,7 @@ public class IdFrame extends JFrame {
 		 c.setBackground(new Color(0, 0, 80));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null); // 화면 정중앙 출력
+		this.mainFrame = mainFrame;
 		
 
 		JLabel registerLabel = new JLabel("ID:");
@@ -88,7 +90,10 @@ public class IdFrame extends JFrame {
 			    } else if (p2.isSelected()) {
 			        selectedOption = "P2";
 			    }
-				
+			    if (mainFrame != null) {
+                    mainFrame.setVisible(false); // MainFrame을 숨깁니다.
+                }
+
 				
 				System.out.println("id : " + id +"  Player: "+selectedOption );
 				GameFrame gameFrame = new GameFrame(id, selectedOption);

@@ -15,6 +15,7 @@ public class Scoreboard {
     }
 
     public void loadScores() throws IOException {
+    	scores.clear();
         File file = new File("topRank.txt");
         if (file.exists()) {
             try (BufferedReader reader = new BufferedReader(new FileReader(file))) {

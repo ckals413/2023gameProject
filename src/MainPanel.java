@@ -40,7 +40,7 @@ public class MainPanel extends JPanel {
 	private JLabel bubbleLabel = new JLabel(bubble1);
 	private JLabel mainPlayer1Label = new JLabel(mainPlayer1_1);
 	private JLabel mainPlayer2Label = new JLabel(mainPlayer2_1);
-	
+	private MainFrame mainFrame;
 
 
 
@@ -50,8 +50,9 @@ public class MainPanel extends JPanel {
 		super.paintComponent(g);
 	}
 
-	public MainPanel() {
+	public MainPanel(MainFrame mainFrame) {
 		setLayout(null);
+		this.mainFrame = mainFrame;
 		
 		gameStartLabel.setSize(startButton1.getIconWidth(), startButton1.getIconHeight());
 		gameStartLabel.setLocation(280, 300);
@@ -87,7 +88,7 @@ public class MainPanel extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				System.out.println("Click startButton");
-				new IdFrame();
+				new IdFrame(mainFrame);
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -108,7 +109,7 @@ public class MainPanel extends JPanel {
 				Scoreboard scoreboard = new Scoreboard();
 		          // 점수판 창 열기
 		          try {
-					new ScoreboardFrame(scoreboard).setVisible(true);
+					new ScoreBoardFrame(scoreboard).setVisible(true);
 				} catch (IOException e1) {
 				}
 			}

@@ -19,7 +19,7 @@ public class MainFrame extends JFrame {
 		setTitle("buble boble");
 		setSize(800,600);
 		makeMenu();
-		mainPanel = new MainPanel();
+		mainPanel = new MainPanel(this);
 		getContentPane().add(mainPanel);
 		setResizable(false);
 		setVisible(true);

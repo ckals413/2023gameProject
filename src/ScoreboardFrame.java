@@ -1,10 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class ScoreboardFrame extends JFrame {
-    public ScoreboardFrame(Scoreboard scoreboard) throws IOException {
+public class ScoreBoardFrame extends JFrame {
+    public ScoreBoardFrame(Scoreboard scoreboard) throws IOException {
         setTitle("점수판");
         setSize(400, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -46,6 +48,18 @@ public class ScoreboardFrame extends JFrame {
         }
 
         add(panel);
+        
+        // 창이 닫힐 때의 리스너 추가,윈도우 어뎁터 
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                
+                MainFrame mainFrame = new MainFrame();
+                mainFrame.setVisible(true);
+                
+            }
+        });
+        
     }
 
     private JLabel createLabel(String text, int x, int y) {
@@ -70,4 +84,6 @@ public class ScoreboardFrame extends JFrame {
             g.drawImage(backgroundImage, 0, 0, this.getWidth(), this.getHeight(), this);
         }
     }
+    
+    
 }

@@ -28,7 +28,7 @@ public class GameFrame extends JFrame {
 		//makeMenu();
 		makeToolbar();
 		//gamePanel = new GamePanel(selectedOption);
-		gamePanel = new GamePanel(selectedOption, soundEffects);
+		gamePanel = new GamePanel(selectedOption, soundEffects, this);
 		gamePanel.setPlayerId(id);
 		getContentPane().add(gamePanel,BorderLayout.CENTER);
 		setVisible(true);
@@ -173,10 +173,13 @@ public class GameFrame extends JFrame {
 		
 		
 		
+		
 		bar.setFloatable(false);//툴바 고정
 	
 	}
-	
+	public void invisbleGameFrame() {
+		this.setVisible(false);
+	}
 	
 
 }

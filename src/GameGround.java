@@ -63,16 +63,17 @@ public class GameGround extends JPanel{
     
     
     private boolean isPaused = false; // 몬스터들을 정지 상태를 관리하는 플래그
+    private boolean isGamePaused = false; 
     public int speed = 5;
     public int levelSpeed = 0;
     public int monsterSpeed = 2;
     public int generationTime = 500;
-    public int time = 60;
+    public int time = 7;
     private boolean isInvincible = false; // 무적 상태 플래그
     private int invincibleCount = 0; // 무적 상태 지속 횟수
-    
+    private GameFrame gameFrame;
     private SoundEffects soundEffects = new SoundEffects();
-   
+    public int newBubbleY;
     
     private boolean isMonster1Displayed = true; // 현재 이미지 상태 추적
    //private JLabel label = new JLabel("여기",monster1,SwingConstants.CENTER);
@@ -108,10 +109,11 @@ public class GameGround extends JPanel{
 
    
 
-   public GameGround(ScorePanel scorePanel, String selectedOption, SoundEffects soundEffects) {
+   public GameGround(ScorePanel scorePanel, String selectedOption, SoundEffects soundEffects,GameFrame gameFrame ) {
      this.selectedOption = selectedOption;
      this.scorePanel = scorePanel;
      this.soundEffects = soundEffects;
+     this.gameFrame = gameFrame;
      System.out.println("옵션"+selectedOption);
       
       // 스레드 생성자 부르기
@@ -224,20 +226,26 @@ public class GameGround extends JPanel{
    }
    
    
-   // 상단에 도달했는지 확인
+   // 상단에 도달했는지 확인, 버블을 위로 올림
    private boolean moveLabelToTop(JLabel label) {
        ImageIcon icon = (ImageIcon) label.getIcon();
-       int newY = label.getY() - 8; // y값을 줄여서 위로 이동
-       if (newY <= 5) { // 상단에 도달하면
-           updateBubblePopImage(label);
+      
+       if(!isGamePaused) {
+    	   newBubbleY = label.getY() - 8; // y값을 줄여서 위로 이동
+    	   if (newBubbleY <= 5) { // 상단에 도달하면
+               updateBubblePopImage(label);
+           }
+           if (newBubbleY <= 0) { // 상단에 도달하면
+               return true; // 제거 대상으로 표시
+           } else {
+               label.setLocation(label.getX(), newBubbleY); // 위치 업데이트
+               repaint();
+               return false;
+           }
        }
-       if (newY <= 0) { // 상단에 도달하면
-           return true; // 제거 대상으로 표시
-       } else {
-           label.setLocation(label.getX(), newY); // 위치 업데이트
-           repaint();
-           return false;
-       }
+       return false;
+       
+       
    }
    
 
@@ -408,9 +416,13 @@ public class GameGround extends JPanel{
       detectBottomThread.interrupt();
       timeThread.interrupt(); // 시간 추적 스레드 중단
       CheckLabelPositionThread.interrupted();
-      
-   
+      isGamePaused = true;
+      //배경음악 종료
       soundEffects.closeAudio();
+//      if (gameFrame != null) {
+//    	  gameFrame.invisbleGameFrame();
+//      }
+      
       
       /**************00000000000000000000000000000000000000000000000000********/
 
@@ -425,7 +437,7 @@ public class GameGround extends JPanel{
           scoreboard.updateScore(playerId, scorePanel.getScore());
 
           // 점수판 창 열기
-          new ScoreboardFrame(scoreboard).setVisible(true);
+          new ScoreBoardFrame(scoreboard).setVisible(true);
       } catch (IOException e) {
           e.printStackTrace(); // 에러 처리
       }

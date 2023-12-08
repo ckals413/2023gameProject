@@ -1,8 +1,5 @@
-AAA,210
-sss,30
-qqq,305
-bbb,100
-aaa,40
-
-chamin,0
-chamin,0
+aaa,2
+bbb,1
+dfd,0
+ckals413,45
+hello,420
