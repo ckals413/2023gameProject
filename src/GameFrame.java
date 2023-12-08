@@ -3,19 +3,23 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.sound.sampled.Clip;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 
 public class GameFrame extends JFrame {
 	  private GamePanel gamePanel;
 	  private String selectedOption;
-
+	  private SoundEffects soundEffects1 = new SoundEffects();
+	  public static Clip clip;
+	  
 	    public GameFrame(String id, String selectedOption) {
 	    this.selectedOption = selectedOption;
 		setTitle("게임");
@@ -27,7 +31,7 @@ public class GameFrame extends JFrame {
 		gamePanel.setPlayerId(id);
 		getContentPane().add(gamePanel,BorderLayout.CENTER);
 		setVisible(true);
-		
+		//soundEffects1.loadAudio(); // 오디오 클립 로드
 		
 	}
 //	//메뉴바 만들기
@@ -62,8 +66,9 @@ public class GameFrame extends JFrame {
 		JToolBar bar = new JToolBar();
 		//bar.setBackground(Color.green);
 		getContentPane().add(bar,BorderLayout.NORTH);
-		JButton b = new JButton("Play");
-		bar.add(b);
+		
+//		JButton b = new JButton("Play");
+//		bar.add(b);
 		//이미지 버튼
 //		ImageIcon normalIcon = new ImageIcon("normal.png");
 //		ImageIcon rolloverIcon = new ImageIcon("rollover.png");
@@ -75,6 +80,17 @@ public class GameFrame extends JFrame {
 		
 		ImageIcon helpIcon = new ImageIcon("toolHelp.png");
 		JButton helpBtn = new JButton(helpIcon);
+		helpBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(GameFrame.this, 
+                                              "추억의 버블보블입니다.\n 각각의 몬스터 마다 능력이 다 다릅니다.\n"
+                                              + " 텍스트를 맞춰 점수를 높게 얻으세요!", 
+                                              "게임 정보", 
+                                              JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+		
 		bar.add(helpBtn);
 		bar.addSeparator();
 		bar.addSeparator();
@@ -82,22 +98,51 @@ public class GameFrame extends JFrame {
 		
 		ImageIcon stopIcon = new ImageIcon("toolStop.png");
 		JButton stopBtn = new JButton(stopIcon);
-		//stopBtn.setRolloverIcon(palseIcon);
+		stopBtn.addActionListener(new ActionListener() {
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	            System.out.println("stopBtn  clicked");
+	           
+	            
+	        }
+	    });
 		bar.add(stopBtn);
 		
 		ImageIcon palseIcon = new ImageIcon("toolPalse.png");
 		JButton palseBtn = new JButton(palseIcon);
+		palseBtn.addActionListener(new ActionListener() {
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	            System.out.println("palseBtn  clicked");
+	        }
+	    });
 		bar.add(palseBtn);
 		
 		bar.addSeparator();
 		
 		ImageIcon soundOffIcon = new ImageIcon("toolSoundOff.png");
 		JButton soundOffBtn = new JButton(soundOffIcon);
+		soundOffBtn.addActionListener(new ActionListener() {
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	            System.out.println("soundOffBtn  clicked");
+	            clip.stop();
+	            //soundEffects1.stopAudio();
+	        }
+	    });
 		bar.add(soundOffBtn);
 		
 		
 		ImageIcon soundOnIcon = new ImageIcon("toolSoundOn.png");
 		JButton soundOnBtn = new JButton(soundOnIcon);
+		soundOnBtn.addActionListener(new ActionListener() {
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	            System.out.println("soundOnBtn  clicked");
+	            clip.loop(clip.LOOP_CONTINUOUSLY);
+	            //soundEffects1.startAudio();
+	        }
+	    });
 		bar.add(soundOnBtn);
 		
 		
