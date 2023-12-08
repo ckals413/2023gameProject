@@ -68,7 +68,7 @@ public class GameGround extends JPanel{
     public int levelSpeed = 0;
     public int monsterSpeed = 2;
     public int generationTime = 500;
-    public int time = 5;
+    public int time = 60;
     private boolean isInvincible = false; // 무적 상태 플래그
     private int invincibleCount = 0; // 무적 상태 지속 횟수
     private GameFrame gameFrame;

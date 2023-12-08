@@ -38,7 +38,8 @@ public class ScorePanel extends JPanel {
         
         //점수 표시
         scoreLabel.setBounds(145, 86, 100, 30); // 위치와 크기 설정
-        scoreLabel.setFont(new Font("맑은고딕", Font.BOLD, 20));
+        scoreLabel.setFont(new Font("맑은고딕", Font.BOLD, 23));
+        scoreLabel.setForeground(new Color(47,85,151));
         add(scoreLabel);
         
         scoreImageLabel = new JLabel(new ImageIcon("labelScore.png"));
@@ -47,7 +48,7 @@ public class ScorePanel extends JPanel {
         
         //시간 
         timeLabel.setFont(new Font("맑은고딕", Font.BOLD, 23));
-        timeLabel.setForeground(Color.blue);
+        timeLabel.setForeground(new Color(47,85,151));
         timeLabel.setBounds(155, 138, 200, 26); // 위치 조정, 'timeImageLabel'에 맞추기
         add(timeLabel);
         
@@ -57,8 +58,9 @@ public class ScorePanel extends JPanel {
         
         // 사용자 ID 표시
 	    playerIdLabel = new JLabel();
-	    playerIdLabel.setBounds(125, 183, 200, 30); // 위치와 크기 설정
+	    playerIdLabel.setBounds(115, 183, 200, 30); // 위치와 크기 설정
 	    playerIdLabel.setFont(new Font("맑은고딕", Font.BOLD, 18));
+	    playerIdLabel.setForeground(new Color(47,85,151));
 	    add(playerIdLabel);
 	    
 	    idImageLabel = new JLabel(new ImageIcon("labelId.png"));

@@ -5,27 +5,36 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 //오른쪽 아래 패널
 public class EditPanel extends JPanel{
-	private JTextField wordInput = new JTextField(10);
+	private JTextField wordInput;
+	private JLabel saveImageLabel;
+	private JButton saveButton;
 	File file = new File("words.txt");
 	public EditPanel() {
 		setBackground(Color.cyan);
+		//setLayout(null);
+		saveImageLabel = new JLabel(new ImageIcon("labelSave.png"));
+        add(saveImageLabel);
+		wordInput = new JTextField(10);
 		add(wordInput);
-		//add(new JButton("save"));
-		//add(new JButton("Save As"));
-		 JButton saveButton = new JButton("Save");
-	        saveButton.addActionListener(new ActionListener() {
-	            @Override
-	            public void actionPerformed(ActionEvent e) {
-	                saveTextToFile();
-	            }
-	        });
-	        add(saveButton);
+
+        saveButton = new JButton("Save");
+     
+		 
+        saveButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+        	saveTextToFile();
+        	}
+        });
+        add(saveButton);
 	}
 	
 	private void saveTextToFile() {
