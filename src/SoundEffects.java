@@ -50,6 +50,15 @@ public class SoundEffects {
     public void increaseTimeAudio() {
         playSound("timeIncrease.wav");
     }
+    // 게임 오버 효과음 
+    public void gameOverAudio() {
+        playSound("gameOver.wav");
+    }
+    // 레벨업 효과음
+    public void levelUpAudio() {
+        playSound("levelUp.wav");
+    }
+
 
     // 키보드 타건 효과음 재생
     public void keyBordAudio() {

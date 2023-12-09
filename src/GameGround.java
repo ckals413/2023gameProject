@@ -102,12 +102,6 @@ public class GameGround extends JPanel{
    private JLabel playerLabel;
    private String selectedOption;
    
-//   // SoundEffects 객체를 설정하는 메서드
-//   public void setSoundEffects(SoundEffects soundEffects) {
-//       this.soundEffects = soundEffects;
-//   }
-
-   
 
    public GameGround(ScorePanel scorePanel, String selectedOption, SoundEffects soundEffects,GameFrame gameFrame ) {
      this.selectedOption = selectedOption;
@@ -322,7 +316,7 @@ public class GameGround extends JPanel{
        }
        // 몬스터 4 (몬스터 정지)
        else if (icon.equals(bubblePop4)) {
-          //generationTime = 500;
+          
            scorePanel.increase(100); // 점수 업데이트
            
            isPaused = true; // 일시정지 상태
@@ -420,6 +414,7 @@ public class GameGround extends JPanel{
       if (gameFrame != null) {
     	  gameFrame.invisbleGameFrame();
       }
+      soundEffects.gameOverAudio();
       
       
       /**************00000000000000000000000000000000000000000000000000********/
@@ -523,7 +518,7 @@ public class GameGround extends JPanel{
             this.targetVector = targetVector;
             
          }
-         
+      
          @Override
          public void run() {
             while(true) {
@@ -539,7 +534,6 @@ public class GameGround extends JPanel{
             } 
          } 
       }
-      
       
       /*******************************************************************/
       
@@ -582,6 +576,8 @@ public class GameGround extends JPanel{
       // 단어를 왼쪽으로 움직이는 스레드
       public class DropWordThread extends Thread {
           private Vector<JLabel> targetVector = null;
+          private int currentLevel = 1;
+
 
           public DropWordThread(Vector<JLabel> targetVector) {
               this.targetVector = targetVector;
@@ -616,27 +612,34 @@ public class GameGround extends JPanel{
                           }else if (icon.equals(defenseItem1_1) || icon.equals(defenseItem1_2)) {
                               speed = 4;
                           }
+                          
+                          
                           //level 1
-                          if(scorePanel.getScore()<400) {
+                          if (scorePanel.getScore() < 400 && currentLevel != 1) {
+                        	 currentLevel = 1;
                              levelSpeed = 0;
-                             generationTime = 2000;
                           }
                         //level 2
-                          else if(scorePanel.getScore()<800) {
+                          else if ( scorePanel.getScore() >= 400&& scorePanel.getScore() < 800 && currentLevel != 2) {
+     
+                        	 soundEffects.levelUpAudio();
                              levelSpeed = 2;
-                             generationTime = 1800;
+                            currentLevel = 2;
                              
                           }
                         //level 3
-                          else if(scorePanel.getScore()<1200) {
+                          else if (scorePanel.getScore() >= 800 && scorePanel.getScore() < 1100 && currentLevel != 3) {
+                        	 soundEffects.levelUpAudio();
                              levelSpeed = 4;
                              generationTime = 1500;
+                             currentLevel = 3;
                           }
                         //level 4
-                          else {
-                             levelSpeed = 8;
-                             generationTime = 1200;
-                          }
+                          else if (scorePanel.getScore() >= 1100 &&currentLevel != 4) {
+                        	    soundEffects.levelUpAudio();
+                        	    levelSpeed = 8;
+                        	    currentLevel = 4;
+                        	}
                           
 
                           // 왼쪽으로 이동
@@ -774,10 +777,10 @@ public class GameGround extends JPanel{
                         System.out.println(targetVector.get(i).getText() + " 실패");
                         
                         // 생명이 다 떨어지면 종료
-//                        boolean isGameOver = scorePanel.isGameOver();
-//                        if(isGameOver == true) { // 모든스레드 종료
-//                           gameOver();
-//                        }
+                        boolean isGameOver = scorePanel.isGameOver();
+                        if(isGameOver == true) { // 모든스레드 종료
+                           gameOver();
+                        }
                         
                         // 게임이 종료되지 않을 경우 패널에서 라벨 제거 게임 계속됨
                         GameGround.this.remove(targetVector.get(i)); // 패널에서 라벨 떼기
