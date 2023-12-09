@@ -67,7 +67,7 @@ public class GameGround extends JPanel{
     public int speed = 5;
     public int levelSpeed = 0;
     public int monsterSpeed = 2;
-    public int generationTime = 1200; //단어 생성 속도 
+    public int newWordTime = 1200; //단어 생성 속도 
     public int time = 120;
     private boolean isInvincible = false; // 무적 상태 플래그
     private int invincibleCount = 0; // 무적 상태 지속 횟수
@@ -75,8 +75,8 @@ public class GameGround extends JPanel{
     private SoundEffects soundEffects = new SoundEffects();
     public int newBubbleY;
     
-    private boolean isMonster1Displayed = true; // 현재 이미지 상태 추적
-   //private JLabel label = new JLabel("여기",monster1,SwingConstants.CENTER);
+   private boolean isMonster1Displayed = true; // 현재 이미지 상태 추적
+  
    private JTextField textInput = new JTextField(20);
    private TextSource textSource = null;
    
@@ -149,15 +149,15 @@ public class GameGround extends JPanel{
                   JTextField t = (JTextField)(e.getSource());
                   String inWord = t.getText(); // 사용자가 입력한 단어
                   for (int i = 0; i < monsterVector.size(); i++) {
-                      JLabel targetLabel = monsterVector.get(i); // JLabel을 가져옵니다.
-                      String text = targetLabel.getText();
+                      JLabel monsterLabel = monsterVector.get(i); // JLabel을 가져옵니다.
+                      String text = monsterLabel.getText();
                       if(text.equals(inWord)) { // 단어맞추기 성공
                          soundEffects.okAudio();
                          System.out.println(inWord + " 정답");
                          JLabel matchedLabel = monsterVector.get(i);
                          toggleBubbleImage(matchedLabel);
                          
-                          movingLabels.add(targetLabel); // 이동 중인 라벨로 추가
+                          movingLabels.add(monsterLabel); // 이동 중인 라벨로 추가
                           monsterVector.remove(i); // 기존 벡터에서는 제거
                           t.setText(null);
                           break; // 일치하는 단어를 찾았으므로 루프 종료
@@ -423,7 +423,7 @@ public class GameGround extends JPanel{
       /**************00000000000000000000000000000000000000000000000000********/
       
       try {
-          Scoreboard scoreboard = new Scoreboard();
+          ScoreBoard scoreboard = new ScoreBoard();
 
           // scorePanel에서 플레이어 ID를 가져오기
           String playerId = scorePanel.getPlayerId();
@@ -464,7 +464,7 @@ public class GameGround extends JPanel{
    // 단어 생성하는 스레드
       public class GenerateWordThread extends Thread{
          
-         private Vector<JLabel>targetVector = null;
+         private Vector<JLabel>wordVector = null;
          
          // 단어 가져와 Label설정, 부착하는 메소드
          synchronized void generateWord() {
@@ -506,7 +506,7 @@ public class GameGround extends JPanel{
                 targetLabel.setLocation(startX,startY);
                 
                 targetLabel.setOpaque(false); // 배경 투명하게
-                targetVector.addElement(targetLabel); // targetVector에 생성한 newWord 추가
+                wordVector.addElement(targetLabel); // targetVector에 생성한 newWord 추가
                 GameGround.this.add(targetLabel);
                  
               }
@@ -515,18 +515,18 @@ public class GameGround extends JPanel{
          }
          
          public GenerateWordThread(Vector<JLabel>targetVector) {
-            this.targetVector = targetVector;
+            this.wordVector = targetVector;
             
          }
       
          @Override
          public void run() {
             while(true) {
-               generationTime = 2000;
+               newWordTime = 2000;
                generateWord();
                GameGround.this.repaint();
                try {
-                  sleep(generationTime);
+                  sleep(newWordTime);
                } catch (InterruptedException e) {
                   return;
                }

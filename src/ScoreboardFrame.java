@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class ScoreBoardFrame extends JFrame {
-    public ScoreBoardFrame(Scoreboard scoreboard) throws IOException {
+    public ScoreBoardFrame(ScoreBoard scoreboard) throws IOException {
         setTitle("점수판");
         setSize(400, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -16,7 +16,7 @@ public class ScoreBoardFrame extends JFrame {
         BackgroundPanel panel = new BackgroundPanel("topRankBackGround.png");
         panel.setLayout(null);
 
-        ArrayList<Scoreboard.PlayerScore> topScores = scoreboard.getTopScores(10);
+        ArrayList<ScoreBoard.PlayerScore> topScores = scoreboard.getTopScores(10);
         
         ImageIcon scoreButtonIcon = new ImageIcon("scoreButton1.png");
         JLabel scoreButtonLabel = new JLabel(scoreButtonIcon);
@@ -38,7 +38,7 @@ public class ScoreBoardFrame extends JFrame {
         panel.add(infoScoreLabel);
         
         int yPos = 125; // 초기 y 위치 설정
-        for (Scoreboard.PlayerScore ps : topScores) {
+        for (ScoreBoard.PlayerScore ps : topScores) {
             JLabel idLabel = createLabel(ps.playerId, 112, yPos);
             JLabel scoreLabel = createLabel(String.valueOf(ps.score), 235, yPos);
             panel.add(idLabel);

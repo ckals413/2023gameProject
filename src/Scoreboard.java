@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Scoreboard {
+public class ScoreBoard {
     private ArrayList<PlayerScore> scores = new ArrayList<>();
 
     public static class PlayerScore {

@@ -115,7 +115,7 @@ public class MainPanel extends JPanel {
 			public void mouseClicked(MouseEvent e) {
 				//System.out.println("Click scoreButton");	
 				click2Audio();
-				Scoreboard scoreboard = new Scoreboard();
+				ScoreBoard scoreboard = new ScoreBoard();
 		          // 점수판 창 열기
 		          try {
 					new ScoreBoardFrame(scoreboard).setVisible(true);

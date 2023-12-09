@@ -36,33 +36,7 @@ public class GameFrame extends JFrame {
 		
 		
 	}
-//	//메뉴바 만들기
-//	private void makeMenu() {
-//		JMenuBar mb = new JMenuBar(); //jframe에 메뉴바가 붙는 위치가 정해져있음. 
-//		//add가 아니라 set인 이유= 메뉴바가 한개라서 
-//		this.setJMenuBar(mb);
-//		JMenu fileMenu = new JMenu("File");
-//		fileMenu.add(new JMenuItem("Open"));
-//		fileMenu.add(new JMenuItem("Save"));
-//		fileMenu.add(new JMenuItem("Save As"));
-//		//분리 선그리기
-//		fileMenu.addSeparator();
-//		JMenuItem exitItem = new JMenuItem("Exit");
-//		exitItem.addActionListener(new ActionListener() {//리스너 달기
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				System.exit(0); //종료
-//			}
-//		});
-//		fileMenu.add(exitItem);
-//		mb.add(fileMenu);
-//		//프로젝트에서도 메뉴바 만들어서 액션 리스너로 반응하게하기
-//		JMenu editMenu = new JMenu("Edit");
-//		editMenu.add(new JMenuItem("instert"));
-//		editMenu.add(new JMenuItem("replace"));
-//		mb.add(editMenu);	
-//	}
-	
+
 	public void makeToolbar() {
 		//기본 툴바가 움직임
 		JToolBar bar = new JToolBar();
@@ -115,31 +89,7 @@ public class GameFrame extends JFrame {
 		bar.addSeparator();
 		bar.addSeparator();
 		bar.addSeparator();
-		
-//		ImageIcon stopIcon = new ImageIcon("toolStop.png");
-//		JButton stopBtn = new JButton(stopIcon);
-//		stopBtn.addActionListener(new ActionListener() {
-//	        @Override
-//	        public void actionPerformed(ActionEvent e) {
-//	            System.out.println("stopBtn  clicked");
-//	          
-//	          
-//	        }
-//	    });
-//		bar.add(stopBtn);
-//		
-//		ImageIcon palseIcon = new ImageIcon("toolPalse.png");
-//		JButton palseBtn = new JButton(palseIcon);
-//		palseBtn.addActionListener(new ActionListener() {
-//	        @Override
-//	        public void actionPerformed(ActionEvent e) {
-//	            System.out.println("palseBtn  clicked");
-//	        }
-//	    });
-//		bar.add(palseBtn);
-//		
-//		bar.addSeparator();
-//		
+
 		ImageIcon soundOffIcon = new ImageIcon("toolSoundOff.png");
 		JButton soundOffBtn = new JButton(soundOffIcon);
 		bar.add(soundOffBtn);
