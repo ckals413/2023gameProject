@@ -2,3 +2,10 @@ aaa,2
 bbb,1
 dfd,0
 chaminee,160
+chamin,0
+chamin,0
+chamin,360
+chamin,470
+chamin,995
+aaaa,410
+as,35

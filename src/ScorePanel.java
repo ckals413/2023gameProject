@@ -76,11 +76,11 @@ public class ScorePanel extends JPanel {
     }
     private void updateLevelImage() {
         // 점수에 따라 다른 레벨 이미지 설정
-        if (score < 20) {
+        if (score < 400) {
             levelLabel.setIcon(new ImageIcon("level1.png"));
-        } else if (score < 100) {
+        } else if (score < 800) {
             levelLabel.setIcon(new ImageIcon("level2.png"));
-        } else if (score < 150) {
+        } else if (score < 1200) {
             levelLabel.setIcon(new ImageIcon("level3.png"));
         } else {
             levelLabel.setIcon(new ImageIcon("level4.png"));
@@ -134,7 +134,7 @@ public class ScorePanel extends JPanel {
 		return score;
 	}
     
-   
+   //목숨 반개 차감
     public void loseHalfLife() {
         if (lives > 0) {
             lives -= 0.5;
@@ -148,10 +148,13 @@ public class ScorePanel extends JPanel {
             repaint();
         }
     }
+    
+    
+    //하트 아이템 터지면 목숨 1.5개 증가
     public void increaseLife() {
         if (lives < 5.0) { // 최대 목숨 수를 초과하지 않도록 확인
             if (lives % 1.0 == 0.5) { // 현재 반 목숨 상태라면
-                lives += 1; // 1.5 개 증가시키기
+                lives += 1.5; // 1.5 개 증가시키기
             } else {
                 lives += 1.5; // 1.5 개 증가시키기
             }

@@ -67,7 +67,7 @@ public class GameGround extends JPanel{
     public int speed = 5;
     public int levelSpeed = 0;
     public int monsterSpeed = 2;
-    public int generationTime = 500;
+    public int generationTime = 2000; //단어 생성 속도 
     public int time = 60;
     private boolean isInvincible = false; // 무적 상태 플래그
     private int invincibleCount = 0; // 무적 상태 지속 횟수
@@ -275,20 +275,15 @@ public class GameGround extends JPanel{
 /******************무적 함수**********************************/
    private void activateInvincibility() {
        isInvincible = true;
-       invincibleCount = 2;  // 예를 들어 2회 무적으로 설정
+       invincibleCount = 2;  //  2회 무적으로 설정
    }
 
    private void deactivateInvincibility() {
        isInvincible = false;
    }
 
-   // defenseItem을 맞췄을 때 호출될 메소드
-   private void processDefenseItem() {
-       activateInvincibility();
-       // 필요하다면 무적 상태를 나타내는 효과음 또는 시각적 피드백 추가
-   }
 
-   // 몬스터 충돌 처리 메소드
+   // 몬스터 반목숨 충돌 처리 메소드
    private void processMonsterCollision(JLabel label) {
        if (isInvincible) {
            invincibleCount--;
@@ -300,6 +295,8 @@ public class GameGround extends JPanel{
            scorePanel.loseHalfLife();
        }
    }
+   
+   
 
 /************무적 함수 끝**************************************/
 
@@ -350,7 +347,7 @@ public class GameGround extends JPanel{
        }
        else if (icon.equals(defenseBubblePop)) {
           /***************/
-          //여기에 한번 맞아도 무적? 여기에서 
+         //디펜스 아이템을 먹으면 무적 상태로 변경
          activateInvincibility();
            
        }
@@ -418,10 +415,11 @@ public class GameGround extends JPanel{
       CheckLabelPositionThread.interrupted();
       isGamePaused = true;
       //배경음악 종료
-      soundEffects.closeAudio();
-//      if (gameFrame != null) {
-//    	  gameFrame.invisbleGameFrame();
-//      }
+      soundEffects.closeAudio(); //배경음악 종료 
+      //재실행 
+      if (gameFrame != null) {
+    	  gameFrame.invisbleGameFrame();
+      }
       
       
       /**************00000000000000000000000000000000000000000000000000********/
@@ -481,17 +479,17 @@ public class GameGround extends JPanel{
               double rand = Math.random();
               
               if(!isPaused) {
-                 if (rand < 0.1) { // 5% 확률로 몬스터 2 생성
+                 if (rand < 0.21) { // 5% 확률로 몬스터 2 생성
                       targetLabel = new JLabel(newWord, monster2_1, SwingConstants.CENTER);
-                  } else if (rand < 0.2) { // 추가 5% 확률로 몬스터 3 생성
+                  } else if (rand < 0.30) { // 추가 5% 확률로 몬스터 3 생성
                       targetLabel = new JLabel(newWord, monster3_1, SwingConstants.CENTER);
-                  } else if (rand < 0.3) { // 추가 5% 확률로 몬스터 4 생성
+                  } else if (rand < 0.45) { // 추가 5% 확률로 몬스터 4 생성
                       targetLabel = new JLabel(newWord, monster4_1, SwingConstants.CENTER);
-                  } else if (rand < 0.4) { // 추가 5% 확률로 시간아이템 생성
+                  } else if (rand < 0.55) { // 추가 5% 확률로 시간아이템 생성
                       targetLabel = new JLabel(newWord, timeItem1_1, SwingConstants.CENTER);
-                  } else if (rand < 0.6) { // 추가 5% 확률로 하트 아이템
+                  } else if (rand < 0.65) { // 추가 5% 확률로 하트 아이템
                       targetLabel = new JLabel(newWord, heartItem1_1, SwingConstants.CENTER);
-                  }else if (rand < 0.9) { // 추가 5% 확률로 방패 아이템
+                  }else if (rand < 0.75) { // 추가 5% 확률로 방패 아이템
                       targetLabel = new JLabel(newWord, defenseItem1_1, SwingConstants.CENTER);
                   }else { // 나머지 확률로 일반 몬스터 생성
                       targetLabel = new JLabel(newWord, monster1_1, SwingConstants.CENTER);
@@ -529,7 +527,7 @@ public class GameGround extends JPanel{
          @Override
          public void run() {
             while(true) {
-               generationTime = 500;
+               generationTime = 2000;
                generateWord();
                GameGround.this.repaint();
                try {
@@ -604,36 +602,42 @@ public class GameGround extends JPanel{
                           ImageIcon icon = (ImageIcon) label.getIcon();
 
                           if (icon.equals(monster1_1) || icon.equals(monster1_2)) {
-                              speed = 6;
+                              speed = 5;
                           } else if (icon.equals(monster2_1) || icon.equals(monster2_2)) {
                               speed = 7;
                           } else if (icon.equals(monster3_1) || icon.equals(monster3_2)) {
                               speed = 9;
                           } else if (icon.equals(monster4_1) || icon.equals(monster4_2)) {
-                              speed = 9;
+                              speed = 10;
                           } else if (icon.equals(timeItem1_1) || icon.equals(timeItem1_2)) {
-                              speed = 5;
+                              speed = 4;
                           } else if (icon.equals(heartItem1_1) || icon.equals(heartItem1_2)) {
-                              speed = 5;
+                              speed = 4;
                           }else if (icon.equals(defenseItem1_1) || icon.equals(defenseItem1_2)) {
-                              speed = 5;
+                              speed = 4;
+                          }
+                          //level 1
+                          if(scorePanel.getScore()<400) {
+                             levelSpeed = 0;
+                             generationTime = 2000;
+                          }
+                        //level 2
+                          else if(scorePanel.getScore()<800) {
+                             levelSpeed = 2;
+                             generationTime = 1800;
+                             
+                          }
+                        //level 3
+                          else if(scorePanel.getScore()<1200) {
+                             levelSpeed = 4;
+                             generationTime = 1500;
+                          }
+                        //level 4
+                          else {
+                             levelSpeed = 8;
+                             generationTime = 1200;
                           }
                           
-                          if(scorePanel.getScore()<50) {
-                             levelSpeed = 0;
-                          }
-                          else if(scorePanel.getScore()<100) {
-                             levelSpeed = 5;
-                          }
-                          else if(scorePanel.getScore()<150) {
-                             levelSpeed = 10;
-                          }
-                          else if(scorePanel.getScore()<200) {
-                             levelSpeed = 15;
-                          }
-                          else {
-                             levelSpeed = 15;
-                          }
 
                           // 왼쪽으로 이동
                           int newX = label.getX() - speed - levelSpeed;
@@ -735,25 +739,25 @@ public class GameGround extends JPanel{
                             onMonsterReachEnd();
                             scorePanel.decrease(5);
                             processMonsterCollision(label); //무적 상태인지 확인, 
-                            //scorePanel.loseHalfLife();
+                           
                              }
                              else if (icon.equals(monster2_1) || icon.equals(monster2_2)) {
                                onMonsterReachEnd(); // 플레이어 이미지 변경을 위해 
                                 scorePanel.decrease(10);
                                 processMonsterCollision(label); //무적 상태인지 확인, 
-                                //scorePanel.loseHalfLife();
+                                
                              }
                              else if (icon.equals(monster3_1) || icon.equals(monster3_2)) {
                                onMonsterReachEnd(); // 플레이어 이미지 변경을 위해 
                                 scorePanel.decrease(15);
                                 processMonsterCollision(label); //무적 상태인지 확인, 
-                                //scorePanel.loseHalfLife();
+                                
                              }
                              else if (icon.equals(monster4_1) || icon.equals(monster4_2)) {
                                onMonsterReachEnd(); // 플레이어 이미지 변경을 위해 
                                scorePanel.decrease(20);
                                 processMonsterCollision(label); //무적 상태인지 확인, 
-                                //scorePanel.loseHalfLife();
+                               
                              }
                              else if (icon.equals(timeItem1_1) || icon.equals(timeItem1_2)) {
                                 scorePanel.decrease(0); //변화 없음

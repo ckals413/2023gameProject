@@ -8,8 +8,14 @@ import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.io.IOException;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -81,13 +87,15 @@ public class MainPanel extends JPanel {
         new ImageSwitcher(bubbleLabel,bubble1,bubble2).start();
         new ImageSwitcher(mainPlayer1Label, mainPlayer1_1, mainPlayer1_2).start();
         new ImageSwitcher(mainPlayer2Label, mainPlayer2_1, mainPlayer2_2).start();
-
+        
+     
 	
 
 		gameStartLabel.addMouseListener((MouseListener) new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				System.out.println("Click startButton");
+				//System.out.println("Click startButton");
+				click2Audio();
 				new IdFrame(mainFrame);
 			}
 			@Override
@@ -105,7 +113,8 @@ public class MainPanel extends JPanel {
 		scoreLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				System.out.println("Click scoreButton");	
+				//System.out.println("Click scoreButton");	
+				click2Audio();
 				Scoreboard scoreboard = new Scoreboard();
 		          // 점수판 창 열기
 		          try {
@@ -128,6 +137,26 @@ public class MainPanel extends JPanel {
 
 		});
 	}
+	
+	// 클릭 효과음 재생
+    public void click2Audio() {
+        playSound("bubblePop.wav");
+    }
+
+
+    // 오디오 파일을 로드하고 재생하는 메소드
+    private void playSound(String soundFileName) {
+        try {
+            Clip clip = AudioSystem.getClip();
+            File audioFile = new File(soundFileName);
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
+            clip.open(audioStream);
+            clip.start();
+        } catch (LineUnavailableException | UnsupportedAudioFileException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+	
 
 	// ImageSwitcher 스레드 클래스
 	class ImageSwitcher extends Thread {
