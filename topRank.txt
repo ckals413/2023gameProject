@@ -5,7 +5,11 @@ KING,350
 Youmin,925
 Cheawon,640
 Sunghyun,520
+Minsun,705
+Suchan,895
 Jisu,230
 Risa,100
 Rose,120
 Gun,520
+Hello,885
+Java,1095

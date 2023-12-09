@@ -80,7 +80,7 @@ public class ScorePanel extends JPanel {
             levelLabel.setIcon(new ImageIcon("level1.png"));
         } else if (score < 800) {
             levelLabel.setIcon(new ImageIcon("level2.png"));
-        } else if (score < 1200) {
+        } else if (score < 1000) {
             levelLabel.setIcon(new ImageIcon("level3.png"));
         } else {
             levelLabel.setIcon(new ImageIcon("level4.png"));

@@ -67,8 +67,8 @@ public class GameGround extends JPanel{
     public int speed = 5;
     public int levelSpeed = 0;
     public int monsterSpeed = 2;
-    public int generationTime = 2000; //단어 생성 속도 
-    public int time = 60;
+    public int generationTime = 1200; //단어 생성 속도 
+    public int time = 120;
     private boolean isInvincible = false; // 무적 상태 플래그
     private int invincibleCount = 0; // 무적 상태 지속 횟수
     private GameFrame gameFrame;
@@ -623,19 +623,18 @@ public class GameGround extends JPanel{
                           else if ( scorePanel.getScore() >= 400&& scorePanel.getScore() < 800 && currentLevel != 2) {
      
                         	 soundEffects.levelUpAudio();
-                             levelSpeed = 2;
+                             levelSpeed = 3;
                             currentLevel = 2;
                              
                           }
                         //level 3
-                          else if (scorePanel.getScore() >= 800 && scorePanel.getScore() < 1100 && currentLevel != 3) {
+                          else if (scorePanel.getScore() >= 800 && scorePanel.getScore() < 1000 && currentLevel != 3) {
                         	 soundEffects.levelUpAudio();
                              levelSpeed = 4;
-                             generationTime = 1500;
                              currentLevel = 3;
                           }
                         //level 4
-                          else if (scorePanel.getScore() >= 1100 &&currentLevel != 4) {
+                          else if (scorePanel.getScore() >= 1000 &&currentLevel != 4) {
                         	    soundEffects.levelUpAudio();
                         	    levelSpeed = 8;
                         	    currentLevel = 4;

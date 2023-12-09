@@ -13,6 +13,7 @@ public class SoundEffects {
     public void loadAudio() {
     	try {
     		this.clip = AudioSystem.getClip();
+    		//File soundFile = new File("startGameTheme.wav");
     		File soundFile = new File("startGameTheme.wav");
     		AudioInputStream audioStream = AudioSystem.getAudioInputStream(soundFile);
     		this.clip.open(audioStream);
